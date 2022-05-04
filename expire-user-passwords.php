@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Expire User Passwords
  * Description: Require certain users to change their passwords on a regular basis.
- * Version: 1.1.2
+ * Version: 1.2
  * Author: Miller Media
  * Author URI: https://www.millermedia.io
  * License: GPL-2.0
@@ -13,7 +13,7 @@
  * This plugin, like WordPress, is licensed under the GPL.
  * Use it to make something cool, have fun, and share what you've learned with others.
  *
- * Copyright © 2019 Miller Media. All Rights Reserved.
+ * Copyright © 2022 Miller Media. All Rights Reserved.
  */
 namespace MillerMedia\ExpireUserPasswords;
 
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 }
 
-define( 'EXPIRE_USER_PASSWORDS_VERSION', '1.0.0' );
+define( 'EXPIRE_USER_PASSWORDS_VERSION', '1.2' );
 define( 'EXPIRE_USER_PASSWORDS_PLUGIN', plugin_basename( __FILE__ ) );
 define( 'EXPIRE_USER_PASSWORDS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'EXPIRE_USER_PASSWORDS_URL', plugin_dir_url( __FILE__ ) );
