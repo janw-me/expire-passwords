@@ -3,7 +3,7 @@ Contributors:      fjarrett, millermedianow, millermediadev
 Tags:              admin, login, membership, passwords, profile, security, users
 Requires at least: 4.0
 Tested up to:      5.9
-Stable tag:        1.1.2
+Stable tag:        1.2
 License:           GPL-2.0
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,10 @@ In the plugin settings you can set the maximum number of days users are allowed 
 3. Users are not permitted to use the same password two times in a row during reset.
 
 == Changelog ==
+
+= 1.2 - May 4, 2022 =
+
+* Added 'eup_submenu_access' filter for greater control to access of plugin settings
 
 = 1.1.0 - February 15, 2020 =
 
