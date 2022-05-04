@@ -18,7 +18,7 @@ final class Expire_User_Passwords_Settings {
 		add_action( 'admin_init',        array( $this, 'init' ) );
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
 
-	}
+    }
 
 	/**
 	 * Add custom submenu page under the Users menu.
@@ -31,7 +31,7 @@ final class Expire_User_Passwords_Settings {
 			'users.php',
 			esc_html__( 'Expire User Passwords', 'expire-user-passwords' ),
 			esc_html__( 'Expire User Passwords', 'expire-user-passwords' ),
-			'manage_options',
+            apply_filters( 'eup_submenu_access', 'manage_options' ),
 			'Expire_User_passwords',
 			array( $this, 'render_submenu_page' )
 		);
@@ -197,5 +197,4 @@ final class Expire_User_Passwords_Settings {
 		);
 
 	}
-
 }
