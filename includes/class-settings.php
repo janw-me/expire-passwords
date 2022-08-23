@@ -14,9 +14,10 @@ final class Expire_User_Passwords_Settings {
 	 */
 	public function __construct() {
 
-		add_action( 'admin_menu',        array( $this, 'submenu_page' ) );
-		add_action( 'admin_init',        array( $this, 'init' ) );
-		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text' ) );
+		add_action( 'admin_menu',          array( $this, 'submenu_page' ) );
+		add_action( 'admin_init',          array( $this, 'init' ) );
+		add_filter( 'admin_footer_text',   array( $this, 'admin_footer_text' ) );
+		add_filter( 'plugin_action_links', array( $this, 'plugin_link' ), 10, 2 );
 
     }
 
@@ -36,6 +37,28 @@ final class Expire_User_Passwords_Settings {
 			array( $this, 'render_submenu_page' )
 		);
 
+	}
+
+	/**
+	 * Add a settings link to the plugin on the plugin page
+	 *
+	 * @action plugin_action_links
+	 *
+	 * @param string[] $actions     An array of plugin action links. By default this can include 'activate', 'delete', 'network_only', ....
+	 * @param string   $plugin_file Path to the plugin file relative to the plugins directory.
+	 *
+	 * @return string[]
+	 */
+	public function plugin_link( array $actions, string $plugin_file ): array {
+		if ( $plugin_file !== EXPIRE_USER_PASSWORDS_PLUGIN ) {
+			return $actions; // wrong plugin.
+		}
+
+		$href          = admin_url( 'users.php?page=Expire_User_passwords' );
+		$settings_link = '<a href="' . $href . '">' . __( 'Settings' ) . '</a>'; // phpcs:ignore WordPress.WP.I18n.MissingArgDomain
+		array_unshift( $actions, $settings_link );
+
+		return $actions;
 	}
 
 	/**
