@@ -124,6 +124,13 @@ final class Expire_User_Passwords_Settings {
 			'user_expass_settings_page',
 			'user_expass_settings_page_section'
 		);
+        add_settings_field(
+			'user_expass_settings_field_email',
+			esc_html__( 'Reset via email', 'expire-user-passwords' ),
+			array( $this, 'render_field_email' ),
+			'user_expass_settings_page',
+			'user_expass_settings_page_section'
+		);
 
 	}
 
@@ -184,6 +191,29 @@ final class Expire_User_Passwords_Settings {
 
 		}
 
+	}
+
+	/**
+	 * Content for the roles setting field.
+	 *
+	 * @see $this->init()
+	 */
+	public function render_field_email() {
+		$options    = (array) get_option( 'user_expass_settings', array() );
+		$send_email = '1';
+		if ( isset( $options['send_email'] ) ) {
+			$send_email = $options['send_email'];
+		}
+
+		echo '<p><label>';
+		echo '<input type="radio" name="user_expass_settings[send_email]" id="user_expass_settings[send_email]" value="1"' . checked( $send_email, '1', false ) . '>';
+		echo __( 'Send an email with the password reset link.', 'expire-user-passwords' );
+		echo '</label></p>';
+
+		echo '<p><label>';
+		echo '<input type="radio" name="user_expass_settings[send_email]" id="user_expass_settings[send_email]" value="0"' . checked( $send_email, '0', false ) . '>';
+		echo __( 'Reset password directly on the login screen.', 'expire-user-passwords' );
+		echo '</label></p>';
 	}
 
 	/**

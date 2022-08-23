@@ -25,14 +25,14 @@ final class Expire_User_Passwords_Login_Screen {
 	 *
 	 * @action wp_login
 	 *
-	 * @param string  $user_login
-	 * @param WP_User $user
+	 * @param string   $user_login
+	 * @param \WP_User $user
 	 */
 	public function wp_login( $user_login, $user ) {
 
 		if ( ! Expire_User_Passwords::get_user_meta( $user ) ) {
 
-		 Expire_User_Passwords::save_user_meta( $user );
+			Expire_User_Passwords::save_user_meta( $user );
 
 		}
 
@@ -46,16 +46,35 @@ final class Expire_User_Passwords_Login_Screen {
 
 		wp_destroy_all_sessions();
 
-		wp_safe_redirect(
-			add_query_arg(
-				array(
-					'action' => 'lostpassword',
-					'user-expass' => 'expired',
+		if ($this->should_send_email()) {
+			wp_safe_redirect(
+				add_query_arg(
+					array(
+						'action' => 'lostpassword',
+						'user-expass' => 'expired',
+					),
+					wp_login_url()
 				),
-				wp_login_url()
-			),
-			302
-		);
+				302
+			);
+		} else {
+			$reset_key = get_password_reset_key( $user );
+			if ( is_wp_error( $reset_key ) ) {
+				return;
+			}
+			wp_safe_redirect(
+				add_query_arg(
+					array(
+						'action' => 'rp',
+						'key' => $reset_key,
+						'login' => $user->user_login
+					),
+					wp_login_url()
+				),
+				302
+			);
+
+		}
 
 		exit;
 
@@ -66,8 +85,8 @@ final class Expire_User_Passwords_Login_Screen {
 	 *
 	 * @action validate_password_reset
 	 *
-	 * @param WP_Error $errors
-	 * @param WP_User  $user
+	 * @param \WP_Error $errors
+	 * @param \WP_User  $user
 	 */
 	public function validate_password_reset( $errors, $user ) {
 
@@ -136,4 +155,18 @@ final class Expire_User_Passwords_Login_Screen {
 
 	}
 
+	/**
+	 * Check if the password reset email should be send.
+	 *
+	 * @return bool
+	 */
+	protected function should_send_email() {
+		$options    = (array) get_option( 'user_expass_settings', array() );
+		$send_email = 1;
+		if ( isset( $options['send_email'] ) ) {
+			$send_email = (int) $options['send_email'];
+		}
+
+		return (bool) $send_email;
+	}
 }
