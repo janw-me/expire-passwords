@@ -236,7 +236,7 @@ final class Expire_User_Passwords_Settings {
 		}
 
 		return sprintf(
-			__( 'Do you like the %1$s plugin? Please consider %2$s on %3$s', 'user-expire-passwords' ),
+			__( 'Do you like the %1$s plugin? Please consider %2$s on %3$s', 'expire-user-passwords' ),
 			esc_html__( 'Expire User Passwords', 'expire-user-passwords' ),
 			sprintf(
 				'<a href="%s" target="_blank">%s</a>',
