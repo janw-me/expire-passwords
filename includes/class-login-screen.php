@@ -66,6 +66,7 @@ final class Expire_User_Passwords_Login_Screen {
 				add_query_arg(
 					array(
 						'action' => 'rp',
+                        'fp' => 'eup',
 						'key' => $reset_key,
 						'login' => $user->user_login
 					),
@@ -126,34 +127,40 @@ final class Expire_User_Passwords_Login_Screen {
 	 *
 	 * @return string
 	 */
-	public function lost_password_message( $message ) {
+    public function lost_password_message( $message ) {
 
-		$action = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
-		$status = filter_input( INPUT_GET, 'user-expass', FILTER_SANITIZE_STRING );
+        $action = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
+        $status = filter_input( INPUT_GET, 'user-expass', FILTER_SANITIZE_STRING );
+        $fp = filter_input( INPUT_GET, 'fp', FILTER_SANITIZE_STRING );
 
-		if ( 'lostpassword' !== $action || 'expired' !== $status ) {
+        $limit = Expire_User_Passwords::get_limit();
 
-			return $message;
+        $eup_message = sprintf(
+            '<p id="login_error">%s</p>',
+            sprintf(
+                _n(
+                    'Your password must be reset every day.',
+                    'Your password must be reset every %d days.',
+                    $limit,
+                    'expire-user-passwords'
+                ),
+                $limit
+            ),
+        );
 
-		}
+        if ( 'lostpassword' !== $action || 'expired' !== $status ) {
+            if ($fp == 'eup') {
+                return $eup_message;
+            }
 
-		$limit = Expire_User_Passwords::get_limit();
+            return $message;
+        }
 
-		return sprintf(
-			'<p id="login_error">%s</p><br><p>%s</p>',
-			sprintf(
-				_n(
-					'Your password must be reset every day.',
-					'Your password must be reset every %d days.',
-					$limit,
-					'expire-user-passwords'
-				),
-				$limit
-			),
-			esc_html__( 'Please enter your username or e-mail below and a password reset link will be sent to you.', 'expire-user-passwords' )
-		);
-
-	}
+        return sprintf('%s<p>%s</p>',
+            $eup_message,
+            esc_html__( 'Please enter your username or e-mail below and a password reset link will be sent to you.', 'expire-user-passwords' )
+        );
+    }
 
 	/**
 	 * Check if the password reset email should be send.
